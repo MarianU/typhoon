@@ -156,23 +156,26 @@ storage:
       contents:
         inline: |
           #!/bin/bash -e
-          mkdir -p -- auth tls/etcd tls/k8s static-manifests manifests/coredns manifests-networking
-          awk '/#####/ {filename=$2; next} {print > filename}' assets
+          awk '/#####/ {filename=$2; next} {cmd="dirname assets.out/"filename;cmd|getline dir; if (length(dir)>1){system("mkdir -p "dir);}; print > "assets.out/"filename}' assets
+          # prepare certificates
+          ## prepare etcd
           mkdir -p /etc/ssl/etcd/etcd
-          mkdir -p /etc/kubernetes/pki
-          mv tls/etcd/{peer*,server*} /etc/ssl/etcd/etcd/
-          mv tls/etcd/etcd-client* /etc/kubernetes/pki/
+          mv assets.out/tls/etcd/{peer*,server*} /etc/ssl/etcd/etcd/
           chown -R etcd:etcd /etc/ssl/etcd
           chmod -R 500 /etc/ssl/etcd
           chmod -R 700 /var/lib/etcd
-          mv auth/* /etc/kubernetes/pki/
-          mv tls/k8s/* /etc/kubernetes/pki/
+          ## prepare kubelet
+          mkdir -p /etc/kubernetes/pki
+          mv assets.out/tls/etcd/etcd-client* /etc/kubernetes/pki/
+          mv assets.out/auth/* /etc/kubernetes/pki/
+          mv assets.out/tls/k8s/* /etc/kubernetes/pki/
+          # copy static manifests
           mkdir -p /etc/kubernetes/manifests
-          mv static-manifests/* /etc/kubernetes/manifests/
+          mv assets.out/static-manifests/* /etc/kubernetes/manifests/
+          # copy bootstrap manifests
           mkdir -p /opt/bootstrap/assets
-          mv manifests /opt/bootstrap/assets/manifests
-          mv manifests-networking/* /opt/bootstrap/assets/manifests/
-          rm -rf assets auth static-manifests tls manifests-networking
+          mv assets.out/manifests /opt/bootstrap/assets/manifests
+          rm -rf assets.out/ assets
     - path: /opt/bootstrap/apply
       filesystem: root
       mode: 0544

@@ -1,6 +1,6 @@
 # Kubernetes assets (kubeconfig, manifests)
 module "bootstrap" {
-  source = "git::https://github.com/poseidon/terraform-render-bootstrap.git?ref=067405ecc46c4edc17ef23b42f9c838aea131cd8"
+  source = "git::https://github.com/MarianU/terraform-render-bootstrap.git?ref=21180c409f6ce51daa29d258a30e4feb84d560e7"
 
   cluster_name                    = var.cluster_name
   api_servers                     = [var.k8s_domain_name]
@@ -13,5 +13,6 @@ module "bootstrap" {
   cluster_domain_suffix           = var.cluster_domain_suffix
   enable_reporting                = var.enable_reporting
   enable_aggregation              = var.enable_aggregation
+  kube_router_use_proxy           = var.kube_router_use_proxy
 }
 
