@@ -150,6 +150,12 @@ variable "enable_aggregation" {
   default     = false
 }
 
+variable "kube_router_use_proxy" {
+  type        = bool
+  description = "Enable the kube-router proxy functionality and disable kube-proxy (defaults to false)"
+  default     = false
+}
+
 # unofficial, undocumented, unsupported
 
 variable "cluster_domain_suffix" {

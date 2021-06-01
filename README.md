@@ -12,8 +12,8 @@ Typhoon distributes upstream Kubernetes, architectural conventions, and cluster 
 ## This Fork
 
 Is the accompanying fork for MarianU/typhoon to implement meeded changes for kube-router functioning.
-WARNING: just bare-metal/flatcar-linux is updated (this was required and used).
-TODO: other distributions need to be updated as well.
+* WARNING: just bare-metal is updated (this is where I got with tests).
+* TODO: other platforms need to be updated as well.
 
 ## Features <a href="https://www.cncf.io/certification/software-conformance/"><img align="right" src="https://storage.googleapis.com/poseidon/certified-kubernetes.png"></a>
 

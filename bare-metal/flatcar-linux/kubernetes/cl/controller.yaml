@@ -163,6 +163,7 @@ storage:
           mv assets.out/tls/etcd/{peer*,server*} /etc/ssl/etcd/etcd/
           chown -R etcd:etcd /etc/ssl/etcd
           chmod -R 500 /etc/ssl/etcd
+          # Flatcar only
           chmod -R 700 /var/lib/etcd
           ## prepare kubelet
           mkdir -p /etc/kubernetes/pki
@@ -176,6 +177,8 @@ storage:
           mkdir -p /opt/bootstrap/assets
           mv assets.out/manifests /opt/bootstrap/assets/manifests
           rm -rf assets.out/ assets
+          # Fedora only
+          # chcon -R -u system_u -t container_file_t /etc/kubernetes/pki
     - path: /opt/bootstrap/apply
       filesystem: root
       mode: 0544
