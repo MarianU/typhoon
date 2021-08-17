@@ -11,7 +11,7 @@ Typhoon distributes upstream Kubernetes, architectural conventions, and cluster 
 
 ## This Fork
 
-Is the accompanying fork for MarianU/typhoon to implement meeded changes for kube-router functioning.
+Is the accompanying fork for MarianU/typhoon to implement needed changes for kube-router functioning.
 * WARNING: just bare-metal is updated (this is where I got with tests).
 * TODO: other platforms need to be updated as well.
 
@@ -64,7 +64,7 @@ Define a Kubernetes cluster by using the Terraform module for your chosen platfo
 
 ```tf
 module "yavin" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/fedora-coreos/kubernetes?ref=v1.21.1"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/fedora-coreos/kubernetes?ref=v1.22.0"
 
   # Google Cloud
   cluster_name  = "yavin"
@@ -73,7 +73,7 @@ module "yavin" {
   dns_zone_name = "example-zone"
 
   # configuration
-  ssh_authorized_key = "ssh-rsa AAAAB3Nz..."
+  ssh_authorized_key = "ssh-ed25519 AAAAB3Nz..."
 
   # optional
   worker_count = 2
@@ -103,9 +103,9 @@ In 4-8 minutes (varies by platform), the cluster will be ready. This Google Clou
 $ export KUBECONFIG=/home/user/.kube/configs/yavin-config
 $ kubectl get nodes
 NAME                                       ROLES    STATUS  AGE  VERSION
-yavin-controller-0.c.example-com.internal  <none>   Ready   6m   v1.21.1
-yavin-worker-jrbf.c.example-com.internal   <none>   Ready   5m   v1.21.1
-yavin-worker-mzdm.c.example-com.internal   <none>   Ready   5m   v1.21.1
+yavin-controller-0.c.example-com.internal  <none>   Ready   6m   v1.22.0
+yavin-worker-jrbf.c.example-com.internal   <none>   Ready   5m   v1.22.0
+yavin-worker-mzdm.c.example-com.internal   <none>   Ready   5m   v1.22.0
 ```
 
 List the pods.

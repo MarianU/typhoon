@@ -1,6 +1,6 @@
 # DigitalOcean
 
-In this tutorial, we'll create a Kubernetes v1.21.1 cluster on DigitalOcean with Fedora CoreOS.
+In this tutorial, we'll create a Kubernetes v1.22.0 cluster on DigitalOcean with Fedora CoreOS.
 
 We'll declare a Kubernetes cluster using the Typhoon Terraform module. Then apply the changes to create controller droplets, worker droplets, DNS records, tags, and TLS assets.
 
@@ -51,7 +51,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.8.0"
+      version = "0.9.0"
     }
     digitalocean = {
       source = "digitalocean/digitalocean"
@@ -81,7 +81,7 @@ Define a Kubernetes cluster using the module `digital-ocean/fedora-coreos/kubern
 
 ```tf
 module "nemo" {
-  source = "git::https://github.com/poseidon/typhoon//digital-ocean/fedora-coreos/kubernetes?ref=v1.21.1"
+  source = "git::https://github.com/poseidon/typhoon//digital-ocean/fedora-coreos/kubernetes?ref=v1.22.0"
 
   # Digital Ocean
   cluster_name = "nemo"
@@ -104,7 +104,7 @@ Reference the [variables docs](#variables) or the [variables.tf](https://github.
 Initial bootstrapping requires `bootstrap.service` be started on one controller node. Terraform uses `ssh-agent` to automate this step. Add your SSH private key to `ssh-agent`.
 
 ```sh
-ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_ed25519
 ssh-add -L
 ```
 
@@ -155,9 +155,9 @@ List nodes in the cluster.
 $ export KUBECONFIG=/home/user/.kube/configs/nemo-config
 $ kubectl get nodes
 NAME               STATUS  ROLES   AGE  VERSION
-10.132.110.130     Ready   <none>  10m  v1.21.1
-10.132.115.81      Ready   <none>  10m  v1.21.1
-10.132.124.107     Ready   <none>  10m  v1.21.1
+10.132.110.130     Ready   <none>  10m  v1.22.0
+10.132.115.81      Ready   <none>  10m  v1.22.0
+10.132.124.107     Ready   <none>  10m  v1.22.0
 ```
 
 List the pods.
@@ -214,7 +214,7 @@ resource "digitalocean_domain" "zone-for-clusters" {
 
 #### SSH Fingerprints
 
-DigitalOcean droplets are created with your SSH public key "fingerprint" (i.e. MD5 hash) to allow access. If your SSH public key is at `~/.ssh/id_rsa`, find the fingerprint with,
+DigitalOcean droplets are created with your SSH public key "fingerprint" (i.e. MD5 hash) to allow access. If your SSH public key is at `~/.ssh/id_ed25519.pub`, find the fingerprint with,
 
 ```bash
 ssh-keygen -E md5 -lf ~/.ssh/id_ed25519.pub | awk '{print $2}'
@@ -238,8 +238,8 @@ Digital Ocean requires the SSH public key be uploaded to your account, so you ma
 | worker_count | Number of workers | 1 | 3 |
 | controller_type | Droplet type for controllers | "s-2vcpu-2gb" | s-2vcpu-2gb, s-2vcpu-4gb, s-4vcpu-8gb, ... |
 | worker_type | Droplet type for workers | "s-1vcpu-2gb" | s-1vcpu-2gb, s-2vcpu-2gb, ... |
-| controller_snippets | Controller Fedora CoreOS Config snippets | [] | [example](/advanced/customization/) |
-| worker_snippets | Worker Fedora CoreOS Config snippets | [] | [example](/advanced/customization/) |
+| controller_snippets | Controller Butane snippets | [] | [example](/advanced/customization/) |
+| worker_snippets | Worker Butane snippets | [] | [example](/advanced/customization/) |
 | networking | Choice of networking provider | "calico" | "calico" or "cilium" or "flannel" |
 | pod_cidr | CIDR IPv4 range to assign to Kubernetes pods | "10.2.0.0/16" | "10.22.0.0/16" |
 | service_cidr | CIDR IPv4 range to assign to Kubernetes services | "10.3.0.0/16" | "10.3.0.0/24" |

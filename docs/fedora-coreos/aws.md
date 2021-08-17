@@ -1,6 +1,6 @@
 # AWS
 
-In this tutorial, we'll create a Kubernetes v1.21.1 cluster on AWS with Fedora CoreOS.
+In this tutorial, we'll create a Kubernetes v1.22.0 cluster on AWS with Fedora CoreOS.
 
 We'll declare a Kubernetes cluster using the Typhoon Terraform module. Then apply the changes to create a VPC, gateway, subnets, security groups, controller instances, worker auto-scaling group, network load balancer, and TLS assets.
 
@@ -51,11 +51,11 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.8.0"
+      version = "0.9.0"
     }
     aws = {
       source = "hashicorp/aws"
-      version = "3.39.0"
+      version = "3.48.0"
     }
   }
 }
@@ -72,7 +72,7 @@ Define a Kubernetes cluster using the module `aws/fedora-coreos/kubernetes`.
 
 ```tf
 module "tempest" {
-  source = "git::https://github.com/poseidon/typhoon//aws/fedora-coreos/kubernetes?ref=v1.21.1"
+  source = "git::https://github.com/poseidon/typhoon//aws/fedora-coreos/kubernetes?ref=v1.22.0"
 
   # AWS
   cluster_name = "tempest"
@@ -80,7 +80,7 @@ module "tempest" {
   dns_zone_id  = "Z3PAABBCFAKEC0"
 
   # configuration
-  ssh_authorized_key = "ssh-rsa AAAAB3Nz..."
+  ssh_authorized_key = "ssh-ed25519 AAAAB3Nz..."
 
   # optional
   worker_count = 2
@@ -95,7 +95,7 @@ Reference the [variables docs](#variables) or the [variables.tf](https://github.
 Initial bootstrapping requires `bootstrap.service` be started on one controller node. Terraform uses `ssh-agent` to automate this step. Add your SSH private key to `ssh-agent`.
 
 ```sh
-ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_ed25519
 ssh-add -L
 ```
 
@@ -145,9 +145,9 @@ List nodes in the cluster.
 $ export KUBECONFIG=/home/user/.kube/configs/tempest-config
 $ kubectl get nodes
 NAME           STATUS  ROLES    AGE  VERSION
-ip-10-0-3-155  Ready   <none>   10m  v1.21.1
-ip-10-0-26-65  Ready   <none>   10m  v1.21.1
-ip-10-0-41-21  Ready   <none>   10m  v1.21.1
+ip-10-0-3-155  Ready   <none>   10m  v1.22.0
+ip-10-0-26-65  Ready   <none>   10m  v1.22.0
+ip-10-0-41-21  Ready   <none>   10m  v1.22.0
 ```
 
 List the pods.
@@ -183,7 +183,7 @@ Check the [variables.tf](https://github.com/poseidon/typhoon/blob/master/aws/fed
 | cluster_name | Unique cluster name (prepended to dns_zone) | "tempest" |
 | dns_zone | AWS Route53 DNS zone | "aws.example.com" |
 | dns_zone_id | AWS Route53 DNS zone id | "Z3PAABBCFAKEC0" |
-| ssh_authorized_key | SSH public key for user 'core' | "ssh-rsa AAAAB3NZ..." |
+| ssh_authorized_key | SSH public key for user 'core' | "ssh-ed25519 AAAAB3NZ..." |
 
 #### DNS Zone
 
@@ -212,12 +212,12 @@ Reference the DNS zone id with `aws_route53_zone.zone-for-clusters.zone_id`.
 | worker_type | EC2 instance type for workers | "t3.small" | See below |
 | os_stream | Fedora CoreOS stream for compute instances | "stable" | "testing", "next" |
 | disk_size | Size of the EBS volume in GB | 30 | 100 |
-| disk_type | Type of the EBS volume | "gp2" | standard, gp2, io1 |
+| disk_type | Type of the EBS volume | "gp3" | standard, gp2, gp3, io1 |
 | disk_iops | IOPS of the EBS volume | 0 (i.e. auto) | 400 |
 | worker_target_groups | Target group ARNs to which worker instances should be added | [] | [aws_lb_target_group.app.id] |
 | worker_price | Spot price in USD for worker instances or 0 to use on-demand instances | 0 | 0.10 |
-| controller_snippets | Controller Fedora CoreOS Config snippets | [] | [examples](/advanced/customization/) |
-| worker_snippets | Worker Fedora CoreOS Config snippets | [] | [examples](/advanced/customization/) |
+| controller_snippets | Controller Butane snippets | [] | [examples](/advanced/customization/) |
+| worker_snippets | Worker Butane snippets | [] | [examples](/advanced/customization/) |
 | networking | Choice of networking provider | "calico" | "calico" or "cilium" or "flannel" |
 | network_mtu | CNI interface MTU (calico only) | 1480 | 8981 |
 | host_cidr | CIDR IPv4 range to assign to EC2 instances | "10.0.0.0/16" | "10.1.0.0/16" |

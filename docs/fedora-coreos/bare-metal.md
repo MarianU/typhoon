@@ -1,6 +1,6 @@
 # Bare-Metal
 
-In this tutorial, we'll network boot and provision a Kubernetes v1.21.1 cluster on bare-metal with Fedora CoreOS.
+In this tutorial, we'll network boot and provision a Kubernetes v1.22.0 cluster on bare-metal with Fedora CoreOS.
 
 First, we'll deploy a [Matchbox](https://github.com/poseidon/matchbox) service and setup a network boot environment. Then, we'll declare a Kubernetes cluster using the Typhoon Terraform module and power on machines. On PXE boot, machines will install Fedora CoreOS to disk, reboot into the disk install, and provision themselves as Kubernetes controllers or workers via Ignition.
 
@@ -138,7 +138,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.8.0"
+      version = "0.9.0"
     }
     matchbox = {
       source = "poseidon/matchbox"
@@ -154,7 +154,7 @@ Define a Kubernetes cluster using the module `bare-metal/fedora-coreos/kubernete
 
 ```tf
 module "mercury" {
-  source = "git::https://github.com/poseidon/typhoon//bare-metal/fedora-coreos/kubernetes?ref=v1.21.1"
+  source = "git::https://github.com/poseidon/typhoon//bare-metal/fedora-coreos/kubernetes?ref=v1.22.0"
 
   # bare-metal
   cluster_name            = "mercury"
@@ -164,7 +164,7 @@ module "mercury" {
 
   # configuration
   k8s_domain_name    = "node1.example.com"
-  ssh_authorized_key = "ssh-rsa AAAAB3Nz..."
+  ssh_authorized_key = "ssh-ed25519 AAAAB3Nz..."
 
   # machines
   controllers = [{
@@ -194,7 +194,7 @@ Reference the [variables docs](#variables) or the [variables.tf](https://github.
 Initial bootstrapping requires `bootstrap.service` be started on one controller node. Terraform uses `ssh-agent` to automate this step. Add your SSH private key to `ssh-agent`.
 
 ```sh
-ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_ed25519
 ssh-add -L
 ```
 
@@ -283,9 +283,9 @@ List nodes in the cluster.
 $ export KUBECONFIG=/home/user/.kube/configs/mercury-config
 $ kubectl get nodes
 NAME                STATUS  ROLES   AGE  VERSION
-node1.example.com   Ready   <none>  10m  v1.21.1
-node2.example.com   Ready   <none>  10m  v1.21.1
-node3.example.com   Ready   <none>  10m  v1.21.1
+node1.example.com   Ready   <none>  10m  v1.22.0
+node2.example.com   Ready   <none>  10m  v1.22.0
+node3.example.com   Ready   <none>  10m  v1.22.0
 ```
 
 List the pods.
@@ -323,7 +323,7 @@ Check the [variables.tf](https://github.com/poseidon/typhoon/blob/master/bare-me
 | os_stream | Fedora CoreOS release stream | "stable" |
 | os_version | Fedora CoreOS version to PXE and install | "32.20201104.3.0" |
 | k8s_domain_name | FQDN resolving to the controller(s) nodes. Workers and kubectl will communicate with this endpoint | "myk8s.example.com" |
-| ssh_authorized_key | SSH public key for user 'core' | "ssh-rsa AAAAB3Nz..." |
+| ssh_authorized_key | SSH public key for user 'core' | "ssh-ed25519 AAAAB3Nz..." |
 | controllers | List of controller machine detail objects (unique name, identifying MAC address, FQDN) | `[{name="node1", mac="52:54:00:a1:9c:ae", domain="node1.example.com"}]` |
 | workers | List of worker machine detail objects (unique name, identifying MAC address, FQDN) | `[{name="node2", mac="52:54:00:b2:2f:86", domain="node2.example.com"}, {name="node3", mac="52:54:00:c3:61:77", domain="node3.example.com"}]` |
 
@@ -335,7 +335,7 @@ Check the [variables.tf](https://github.com/poseidon/typhoon/blob/master/bare-me
 | install_disk | Disk device where Fedora CoreOS should be installed | "sda" (not "/dev/sda" like Container Linux) | "sdb" |
 | networking | Choice of networking provider | "calico" | "calico" or "cilium" or "flannel" |
 | network_mtu | CNI interface MTU (calico-only) | 1480 | - |
-| snippets | Map from machine names to lists of Fedora CoreOS Config snippets | {} | [examples](/advanced/customization/) |
+| snippets | Map from machine names to lists of Butane snippets | {} | [examples](/advanced/customization/) |
 | network_ip_autodetection_method | Method to detect host IPv4 address (calico-only) | "first-found" | "can-reach=10.0.0.1" |
 | pod_cidr | CIDR IPv4 range to assign to Kubernetes pods | "10.2.0.0/16" | "10.22.0.0/16" |
 | service_cidr | CIDR IPv4 range to assign to Kubernetes services | "10.3.0.0/16" | "10.3.0.0/24" |

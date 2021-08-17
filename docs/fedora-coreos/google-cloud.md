@@ -1,6 +1,6 @@
 # Google Cloud
 
-In this tutorial, we'll create a Kubernetes v1.21.1 cluster on Google Compute Engine with Fedora CoreOS.
+In this tutorial, we'll create a Kubernetes v1.22.0 cluster on Google Compute Engine with Fedora CoreOS.
 
 We'll declare a Kubernetes cluster using the Typhoon Terraform module. Then apply the changes to create a network, firewall rules, health checks, controller instances, worker managed instance group, load balancers, and TLS assets.
 
@@ -52,11 +52,11 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.8.0"
+      version = "0.9.0"
     }
     google = {
       source = "hashicorp/google"
-      version = "3.66.1"
+      version = "3.75.0"
     }
   }
 }
@@ -82,7 +82,7 @@ module "yavin" {
   dns_zone_name = "example-zone"
 
   # configuration
-  ssh_authorized_key = "ssh-rsa AAAAB3Nz..."
+  ssh_authorized_key = "ssh-ed25519 AAAAB3Nz..."
 
   # optional
   worker_count = 2
@@ -96,7 +96,7 @@ Reference the [variables docs](#variables) or the [variables.tf](https://github.
 Initial bootstrapping requires `bootstrap.service` be started on one controller node. Terraform uses `ssh-agent` to automate this step. Add your SSH private key to `ssh-agent`.
 
 ```sh
-ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_ed25519
 ssh-add -L
 ```
 
@@ -147,9 +147,9 @@ List nodes in the cluster.
 $ export KUBECONFIG=/home/user/.kube/configs/yavin-config
 $ kubectl get nodes
 NAME                                       ROLES    STATUS  AGE  VERSION
-yavin-controller-0.c.example-com.internal  <none>   Ready   6m   v1.21.1
-yavin-worker-jrbf.c.example-com.internal   <none>   Ready   5m   v1.21.1
-yavin-worker-mzdm.c.example-com.internal   <none>   Ready   5m   v1.21.1
+yavin-controller-0.c.example-com.internal  <none>   Ready   6m   v1.22.0
+yavin-worker-jrbf.c.example-com.internal   <none>   Ready   5m   v1.22.0
+yavin-worker-mzdm.c.example-com.internal   <none>   Ready   5m   v1.22.0
 ```
 
 List the pods.
@@ -186,7 +186,7 @@ Check the [variables.tf](https://github.com/poseidon/typhoon/blob/master/google-
 | region | Google Cloud region | "us-central1" |
 | dns_zone | Google Cloud DNS zone | "google-cloud.example.com" |
 | dns_zone_name | Google Cloud DNS zone name | "example-zone" |
-| ssh_authorized_key | SSH public key for user 'core' | "ssh-rsa AAAAB3NZ..." |
+| ssh_authorized_key | SSH public key for user 'core' | "ssh-ed25519 AAAAB3NZ..." |
 
 Check the list of valid [regions](https://cloud.google.com/compute/docs/regions-zones/regions-zones) and list Fedora CoreOS [images](https://cloud.google.com/compute/docs/images) with `gcloud compute images list | grep fedora-coreos`.
 
@@ -218,8 +218,8 @@ resource "google_dns_managed_zone" "zone-for-clusters" {
 | os_stream | Fedora CoreOS stream for compute instances | "stable" | "stable", "testing", "next" |
 | disk_size | Size of the disk in GB | 30 | 100 |
 | worker_preemptible | If enabled, Compute Engine will terminate workers randomly within 24 hours | false | true |
-| controller_snippets | Controller Fedora CoreOS Config snippets | [] | [examples](/advanced/customization/) |
-| worker_snippets | Worker Fedora CoreOS Config snippets | [] | [examples](/advanced/customization/) |
+| controller_snippets | Controller Butane snippets | [] | [examples](/advanced/customization/) |
+| worker_snippets | Worker Butane snippets | [] | [examples](/advanced/customization/) |
 | networking | Choice of networking provider | "calico" | "calico" or "cilium" or "flannel" |
 | pod_cidr | CIDR IPv4 range to assign to Kubernetes pods | "10.2.0.0/16" | "10.22.0.0/16" |
 | service_cidr | CIDR IPv4 range to assign to Kubernetes services | "10.3.0.0/16" | "10.3.0.0/24" |

@@ -4,16 +4,61 @@ Notable changes between versions.
 
 ## Latest
 
+## v1.22.0
+
+* Kubernetes [v1.22.0](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.22.md#v1220)
+* Update etcd from v3.4.16 to [v3.5.0](https://github.com/etcd-io/etcd/releases/tag/v3.5.0)
+* Switch `kube-controller-manager` and `kube-scheduler` to use secure port only
+  * Update Prometheus config to discover endpoints and use a bearer token to scrape
+
+### Fedora CoreOS
+
+* Add Cilium cgroups v2 support on Fedora CoreOS
+* Update Butane Config version from v1.2.0 to v1.4.0
+  * Rename Fedora CoreOS Config to Butane Config
+  * Require any [snippets](https://typhoon.psdn.io/advanced/customization/#hosts) customizations to update to v1.4.0
+
+### Addons
+
+* Update nginx-ingress from v0.47.0 to [v1.0.0-beta.1](https://github.com/kubernetes/ingress-nginx/releases/tag/controller-v1.0.0-beta.1)
+* Update node-exporter from v1.2.0 to [v1.2.2](https://github.com/prometheus/node_exporter/releases/tag/v1.2.2)
+* Update kube-state-metrics from v2.1.0 to [v2.1.1](https://github.com/kubernetes/kube-state-metrics/releases/tag/v2.1.1)
+* Update Grafana from v8.0.6 to [v8.1.1](https://github.com/grafana/grafana/releases/tag/v8.1.1)
+
+## v1.21.3
+
+* Kubernetes [v1.21.3](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.21.md#v1213)
+* Update Cilium from v1.10.1 to [v1.10.3](https://github.com/cilium/cilium/releases/tag/v1.10.3)
+* Require [poseidon/ct](https://github.com/poseidon/terraform-provider-ct) Terraform provider v0.9+ ([notes](https://typhoon.psdn.io/topics/maintenance/#upgrade-terraform-provider-ct))
+
+### AWS
+
+* Change default disk type from `gp2` to `gp3` ([#1012](https://github.com/poseidon/typhoon/pull/1012))
+
+### Addons
+
+* Update Prometheus from v2.28.0 to [v2.28.1](https://github.com/prometheus/prometheus/releases/tag/v2.28.1)
+* Update node-exporter from v1.1.2 to [v1.2.0](https://github.com/prometheus/node_exporter/releases/tag/v1.2.0)
+* Update Grafana from v8.0.3 to [v8.0.6](https://github.com/grafana/grafana/releases/tag/v8.0.6)
+
+### Known Issues
+
+* Cilium with recent Fedora CoreOS will have networking issues ([fedora-coreos#881](https://github.com/coreos/fedora-coreos-tracker/issues/881)) (fixed in v1.21.4)
+
+## v1.21.2
+
+* Kubernetes [v1.21.2](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.21.md#v1212)
 * Add Terraform v1.0.x support ([#974](https://github.com/poseidon/typhoon/pull/974))
   * Continue to support Terraform v0.13.x, v0.14.4+, and v0.15.x
+* Update CoreDNS from v1.8.0 to [v1.8.4]([#1006](https://github.com/poseidon/typhoon/pull/1006))
 * Update Cilium from v1.9.6 to [v1.10.1](https://github.com/cilium/cilium/releases/tag/v1.10.1)
 * Update Calico from v3.19.0 to [v3.19.1](https://github.com/projectcalico/calico/releases/tag/v3.19.1)
 
 ### Addons
 
 * Update kube-state-metrics from v2.0.0 to [v2.1.0](https://github.com/kubernetes/kube-state-metrics/releases/tag/v2.1.0)
-* Update Prometheus from v2.27.0 to [v2.27.1](https://github.com/prometheus/prometheus/releases/tag/v2.27.1)
-* Update Grafana from v7.5.6 to [v7.5.7](https://github.com/grafana/grafana/releases/tag/v7.5.7)
+* Update Prometheus from v2.27.0 to [v2.28.0](https://github.com/prometheus/prometheus/releases/tag/v2.28.0)
+* Update Grafana from v7.5.6 to [v8.0.3](https://github.com/grafana/grafana/releases/tag/v8.0.3)
 * Update nginx-ingress from v0.46.0 to [v0.47.0](https://github.com/kubernetes/ingress-nginx/releases/tag/controller-v0.47.0)
 
 ### Fedora CoreOS
@@ -30,6 +75,10 @@ Notable changes between versions.
 #### DigitalOcean
 
 * Workaround systemd path unit issue [fedora-coreos-tracker/#861](https://github.com/coreos/fedora-coreos-tracker/issues/861)
+
+### Known Issues
+
+* Cilium with recent Fedora CoreOS will have networking issues ([fedora-coreos#881](https://github.com/coreos/fedora-coreos-tracker/issues/881)) (fixed in v1.21.4)
 
 ## v1.21.1
 

@@ -1,6 +1,6 @@
 # Azure
 
-In this tutorial, we'll create a Kubernetes v1.21.1 cluster on Azure with Fedora CoreOS.
+In this tutorial, we'll create a Kubernetes v1.22.0 cluster on Azure with Fedora CoreOS.
 
 We'll declare a Kubernetes cluster using the Typhoon Terraform module. Then apply the changes to create a resource group, virtual network, subnets, security groups, controller availability set, worker scale set, load balancer, and TLS assets.
 
@@ -48,11 +48,11 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.8.0"
+      version = "0.9.0"
     }
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "2.58.0"
+      version = "2.68.0"
     }
   }
 }
@@ -86,7 +86,7 @@ Define a Kubernetes cluster using the module `azure/fedora-coreos/kubernetes`.
 
 ```tf
 module "ramius" {
-  source = "git::https://github.com/poseidon/typhoon//azure/fedora-coreos/kubernetes?ref=v1.21.1"
+  source = "git::https://github.com/poseidon/typhoon//azure/fedora-coreos/kubernetes?ref=v1.22.0"
 
   # Azure
   cluster_name   = "ramius"
@@ -96,7 +96,7 @@ module "ramius" {
 
   # configuration
   os_image           = "/subscriptions/some/path/Microsoft.Compute/images/fedora-coreos-31.20200323.3.2"
-  ssh_authorized_key = "ssh-rsa AAAAB3Nz..."
+  ssh_authorized_key = "ssh-ed25519 AAAAB3Nz..."
 
   # optional
   worker_count    = 2
@@ -111,7 +111,7 @@ Reference the [variables docs](#variables) or the [variables.tf](https://github.
 Initial bootstrapping requires `bootstrap.service` be started on one controller node. Terraform uses `ssh-agent` to automate this step. Add your SSH private key to `ssh-agent`.
 
 ```sh
-ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_ed25519
 ssh-add -L
 ```
 
@@ -161,9 +161,9 @@ List nodes in the cluster.
 $ export KUBECONFIG=/home/user/.kube/configs/ramius-config
 $ kubectl get nodes
 NAME                  STATUS  ROLES   AGE  VERSION
-ramius-controller-0   Ready   <none>  24m  v1.21.1
-ramius-worker-000001  Ready   <none>  25m  v1.21.1
-ramius-worker-000002  Ready   <none>  24m  v1.21.1
+ramius-controller-0   Ready   <none>  24m  v1.22.0
+ramius-worker-000001  Ready   <none>  25m  v1.22.0
+ramius-worker-000002  Ready   <none>  24m  v1.22.0
 ```
 
 List the pods.
@@ -201,7 +201,7 @@ Check the [variables.tf](https://github.com/poseidon/typhoon/blob/master/azure/f
 | dns_zone | Azure DNS zone | "azure.example.com" |
 | dns_zone_group | Resource group where the Azure DNS zone resides | "global" |
 | os_image | Fedora CoreOS image for instances | "/subscriptions/..../custom-image" |
-| ssh_authorized_key | SSH public key for user 'core' | "ssh-rsa AAAAB3NZ..." |
+| ssh_authorized_key | SSH public key for user 'core' | "ssh-ed25519 AAAAB3NZ..." |
 
 !!! tip
     Regions are shown in [docs](https://azure.microsoft.com/en-us/global-infrastructure/regions/) or with `az account list-locations --output table`.
@@ -243,8 +243,8 @@ Reference the DNS zone with `azurerm_dns_zone.clusters.name` and its resource gr
 | worker_type | Machine type for workers | "Standard_DS1_v2" | See below |
 | disk_size | Size of the disk in GB | 30 | 100 |
 | worker_priority | Set priority to Spot to use reduced cost surplus capacity, with the tradeoff that instances can be deallocated at any time | Regular | Spot |
-| controller_snippets | Controller Fedora CoreOS Config snippets | [] | [example](/advanced/customization/#usage) |
-| worker_snippets | Worker Fedora CoreOS Config snippets | [] | [example](/advanced/customization/#usage) |
+| controller_snippets | Controller Butane snippets | [] | [example](/advanced/customization/#usage) |
+| worker_snippets | Worker Butane snippets | [] | [example](/advanced/customization/#usage) |
 | networking | Choice of networking provider | "calico" | "calico" or "cilium" or "flannel" |
 | host_cidr | CIDR IPv4 range to assign to instances | "10.0.0.0/16" | "10.0.0.0/20" |
 | pod_cidr | CIDR IPv4 range to assign to Kubernetes pods | "10.2.0.0/16" | "10.22.0.0/16" |

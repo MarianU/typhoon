@@ -19,7 +19,7 @@ Create a cluster following the AWS [tutorial](../flatcar-linux/aws.md#cluster). 
 
     ```tf
     module "tempest-worker-pool" {
-      source = "git::https://github.com/poseidon/typhoon//aws/fedora-coreos/kubernetes/workers?ref=v1.21.1"
+      source = "git::https://github.com/poseidon/typhoon//aws/fedora-coreos/kubernetes/workers?ref=v1.22.0"
 
       # AWS
       vpc_id          = module.tempest.vpc_id
@@ -42,7 +42,7 @@ Create a cluster following the AWS [tutorial](../flatcar-linux/aws.md#cluster). 
 
     ```tf
     module "tempest-worker-pool" {
-      source = "git::https://github.com/poseidon/typhoon//aws/flatcar-linux/kubernetes/workers?ref=v1.21.1"
+      source = "git::https://github.com/poseidon/typhoon//aws/flatcar-linux/kubernetes/workers?ref=v1.22.0"
 
       # AWS
       vpc_id          = module.tempest.vpc_id
@@ -82,7 +82,7 @@ The AWS internal `workers` module supports a number of [variables](https://githu
 | subnet_ids | Must be set to `subnet_ids` output by cluster | module.cluster.subnet_ids |
 | security_groups | Must be set to `worker_security_groups` output by cluster | module.cluster.worker_security_groups |
 | kubeconfig | Must be set to `kubeconfig` output by cluster | module.cluster.kubeconfig |
-| ssh_authorized_key | SSH public key for user 'core' | "ssh-rsa AAAAB3NZ..." |
+| ssh_authorized_key | SSH public key for user 'core' | "ssh-ed25519 AAAAB3NZ..." |
 
 #### Optional
 
@@ -93,7 +93,7 @@ The AWS internal `workers` module supports a number of [variables](https://githu
 | os_image | AMI channel for a Container Linux derivative | "flatcar-stable" | flatcar-stable, flatcar-beta, flatcar-alpha |
 | os_stream | Fedora CoreOS stream for compute instances | "stable" | "testing", "next" |
 | disk_size | Size of the EBS volume in GB | 40 | 100 |
-| disk_type | Type of the EBS volume | "gp2" | standard, gp2, io1 |
+| disk_type | Type of the EBS volume | "gp3" | standard, gp2, gp3, io1 |
 | disk_iops | IOPS of the EBS volume | 0 (i.e. auto) | 400 |
 | spot_price | Spot price in USD for worker instances or 0 to use on-demand instances | 0 | 0.10 |
 | snippets | Fedora CoreOS or Container Linux Config snippets | [] | [examples](/advanced/customization/) |
@@ -111,7 +111,7 @@ Create a cluster following the Azure [tutorial](../flatcar-linux/azure.md#cluste
 
     ```tf
     module "ramius-worker-pool" {
-      source = "git::https://github.com/poseidon/typhoon//azure/fedora-coreos/kubernetes/workers?ref=v1.21.1"
+      source = "git::https://github.com/poseidon/typhoon//azure/fedora-coreos/kubernetes/workers?ref=v1.22.0"
 
       # Azure
       region                  = module.ramius.region
@@ -137,7 +137,7 @@ Create a cluster following the Azure [tutorial](../flatcar-linux/azure.md#cluste
 
     ```tf
     module "ramius-worker-pool" {
-      source = "git::https://github.com/poseidon/typhoon//azure/flatcar-linux/kubernetes/workers?ref=v1.21.1"
+      source = "git::https://github.com/poseidon/typhoon//azure/flatcar-linux/kubernetes/workers?ref=v1.22.0"
 
       # Azure
       region                  = module.ramius.region
@@ -182,7 +182,7 @@ The Azure internal `workers` module supports a number of [variables](https://git
 | security_group_id | Must be set to `security_group_id` output by cluster | module.cluster.security_group_id |
 | backend_address_pool_id | Must be set to `backend_address_pool_id` output by cluster | module.cluster.backend_address_pool_id |
 | kubeconfig | Must be set to `kubeconfig` output by cluster | module.cluster.kubeconfig |
-| ssh_authorized_key | SSH public key for user 'core' | "ssh-rsa AAAAB3NZ..." |
+| ssh_authorized_key | SSH public key for user 'core' | "ssh-ed25519 AAAAB3NZ..." |
 
 #### Optional
 
@@ -207,7 +207,7 @@ Create a cluster following the Google Cloud [tutorial](../flatcar-linux/google-c
 
     ```tf
     module "yavin-worker-pool" {
-      source = "git::https://github.com/poseidon/typhoon//google-cloud/fedora-coreos/kubernetes/workers?ref=v1.21.1"
+      source = "git::https://github.com/poseidon/typhoon//google-cloud/fedora-coreos/kubernetes/workers?ref=v1.22.0"
 
       # Google Cloud
       region       = "europe-west2"
@@ -231,7 +231,7 @@ Create a cluster following the Google Cloud [tutorial](../flatcar-linux/google-c
 
     ```tf
     module "yavin-worker-pool" {
-      source = "git::https://github.com/poseidon/typhoon//google-cloud/flatcar-linux/kubernetes/workers?ref=v1.21.1"
+      source = "git::https://github.com/poseidon/typhoon//google-cloud/flatcar-linux/kubernetes/workers?ref=v1.22.0"
 
       # Google Cloud
       region       = "europe-west2"
@@ -262,11 +262,11 @@ Verify a managed instance group of workers joins the cluster within a few minute
 ```
 $ kubectl get nodes
 NAME                                             STATUS   AGE    VERSION
-yavin-controller-0.c.example-com.internal        Ready    6m     v1.21.1
-yavin-worker-jrbf.c.example-com.internal         Ready    5m     v1.21.1
-yavin-worker-mzdm.c.example-com.internal         Ready    5m     v1.21.1
-yavin-16x-worker-jrbf.c.example-com.internal     Ready    3m     v1.21.1
-yavin-16x-worker-mzdm.c.example-com.internal     Ready    3m     v1.21.1
+yavin-controller-0.c.example-com.internal        Ready    6m     v1.22.0
+yavin-worker-jrbf.c.example-com.internal         Ready    5m     v1.22.0
+yavin-worker-mzdm.c.example-com.internal         Ready    5m     v1.22.0
+yavin-16x-worker-jrbf.c.example-com.internal     Ready    3m     v1.22.0
+yavin-16x-worker-mzdm.c.example-com.internal     Ready    3m     v1.22.0
 ```
 
 ### Variables
@@ -283,7 +283,7 @@ The Google Cloud internal `workers` module supports a number of [variables](http
 | network | Must be set to `network_name` output by cluster | module.cluster.network_name |
 | kubeconfig | Must be set to `kubeconfig` output by cluster | module.cluster.kubeconfig |
 | os_image | Container Linux image for compute instances | "uploaded-flatcar-image" |
-| ssh_authorized_key | SSH public key for user 'core' | "ssh-rsa AAAAB3NZ..." |
+| ssh_authorized_key | SSH public key for user 'core' | "ssh-ed25519 AAAAB3NZ..." |
 
 Check the list of regions [docs](https://cloud.google.com/compute/docs/regions-zones/regions-zones) or with `gcloud compute regions list`.
 
