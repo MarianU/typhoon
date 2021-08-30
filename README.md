@@ -64,7 +64,7 @@ Define a Kubernetes cluster by using the Terraform module for your chosen platfo
 
 ```tf
 module "yavin" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/fedora-coreos/kubernetes?ref=v1.22.0"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/fedora-coreos/kubernetes?ref=v1.22.1"
 
   # Google Cloud
   cluster_name  = "yavin"
@@ -103,9 +103,9 @@ In 4-8 minutes (varies by platform), the cluster will be ready. This Google Clou
 $ export KUBECONFIG=/home/user/.kube/configs/yavin-config
 $ kubectl get nodes
 NAME                                       ROLES    STATUS  AGE  VERSION
-yavin-controller-0.c.example-com.internal  <none>   Ready   6m   v1.22.0
-yavin-worker-jrbf.c.example-com.internal   <none>   Ready   5m   v1.22.0
-yavin-worker-mzdm.c.example-com.internal   <none>   Ready   5m   v1.22.0
+yavin-controller-0.c.example-com.internal  <none>   Ready   6m   v1.22.1
+yavin-worker-jrbf.c.example-com.internal   <none>   Ready   5m   v1.22.1
+yavin-worker-mzdm.c.example-com.internal   <none>   Ready   5m   v1.22.1
 ```
 
 List the pods.
