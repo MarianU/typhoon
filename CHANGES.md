@@ -4,6 +4,43 @@ Notable changes between versions.
 
 ## Latest
 
+## v1.23.3
+
+* Kubernetes [v1.22.3](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.22.md#v1223)
+* Update etcd from v3.5.0 to [v3.5.1](https://github.com/etcd-io/etcd/releases/tag/v3.5.1)
+* Update Cilium from v1.10.4 to [v1.10.5](https://github.com/cilium/cilium/releases/tag/v1.10.5)
+* Update Calico from v3.20.1 to [v3.20.2](https://github.com/projectcalico/calico/releases/tag/v3.20.2)
+* Use Calico's iptables legacy vs nft auto-detection
+* Update flannel from v0.13.0 to v0.14.0
+* Change `enable_aggregation` default to true ([#279](https://github.com/poseidon/terraform-render-bootstrap/pull/279))
+
+### Bare-Metal
+
+* Require Terraform provider `poseidon/matchbox` v0.5+ ([#1048](https://github.com/poseidon/typhoon/pull/1048))
+
+### Addons
+
+* Update nginx-ingress from v1.0.0 to [v1.0.4](https://github.com/kubernetes/ingress-nginx/releases/tag/controller-v1.0.4)
+* Update Prometheus from v2.29.2 to [v2.30.3](https://github.com/prometheus/prometheus/releases/tag/v2.30.3)
+* Update kube-state-metrics from v2.2.0 to [v2.2.3](https://github.com/kubernetes/kube-state-metrics/releases/tag/v2.2.3)
+* Update Grafana from v8.1.2 to [v8.2.1](https://github.com/grafana/grafana/releases/tag/v8.2.1)
+
+## v1.22.2
+
+* Kubernetes [v1.22.2](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.22.md#v1222)
+* Update Cilium from v1.10.3 to [v1.10.4](https://github.com/cilium/cilium/releases/tag/v1.10.4)
+* Update Calico from v3.20.0 to [v3.20.1](https://github.com/projectcalico/calico/releases/tag/v3.20.1)
+* Fix access to ClusterIP services with Cilium ([#276](https://github.com/poseidon/terraform-render-bootstrap/pull/276))
+
+### Fedora CoreOS
+
+* Use Fedora CoreOS ARM64 AMIs ([#1038](https://github.com/poseidon/typhoon/pull/1038))
+
+### Addons
+
+* Update Prometheus from v2.29.1 to [v2.29.2](https://github.com/prometheus/prometheus/releases/tag/v2.29.2)
+* Update kube-state-metrics from v2.1.1 to [v2.2.0](https://github.com/kubernetes/kube-state-metrics/releases/tag/v2.2.0)
+
 ## v1.22.1
 
 * Kubernetes [v1.22.1](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.22.md#v1221)
